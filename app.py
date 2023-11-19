@@ -1,14 +1,24 @@
-from flask import Flask, render_template, redirect, url_for, request, json, flash, session
+from flask import Flask, render_template, redirect, url_for, request, flash, session, jsonify, request
 import requests
 from flask_bootstrap import Bootstrap
 from flask_toastr import Toastr
 
-app = Flask(__name__)
-toastr = Toastr(app)
-app.secret_key = 'TAKANAKA'
+from flask_jwt_extended import create_access_token
+from flask_jwt_extended import get_jwt_identity
+from flask_jwt_extended import jwt_required
+from flask_jwt_extended import JWTManager
+from flask_jwt_extended import set_access_cookies
 
+app = Flask(__name__)
+
+# Setup the Flask-JWT-Extended extension
+app.config["JWT_SECRET_KEY"] = "TAKANAKA"
+app.config["JWT_COOKIE_SECURE"] = True
+app.config["JWT_TOKEN_LOCATION"] = ["cookies"]
+jwt = JWTManager(app)
 
 @app.route('/login_2fa', methods=['GET', 'POST'])
+@jwt_required()
 def login_2fa():
     error = None
     if request.method == 'POST':
@@ -20,8 +30,7 @@ def login_2fa():
             resp = requests.post('http://192.168.157.10/validate/check', data={'user': username, 'pass':otp, 'realm':'defrealm'})
             resp = resp.json()
             if resp['result']['authentication'] == "ACCEPT":
-                print("hello!")
-                #return redirect(url_for("profile", username=username))
+                return redirect(url_for("profile", username=username))
 
     return render_template('login_2fa.html', error=error)
 
@@ -58,7 +67,10 @@ def login():
         resp = requests.post('http://192.168.157.10/auth', data={'username':username, 'password':password, 'realm':'defrealm'})
         resp = resp.json()
         if resp['result']['status']:
-            return redirect(url_for("login_2fa", username=username))
+            response = redirect(url_for("login_2fa", username=username))
+            access_token = create_access_token(identity=username)
+            set_access_cookies(response, access_token)
+            return response
 
 
 if __name__=='__main__':
