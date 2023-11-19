@@ -34,7 +34,7 @@ def reset():
                     resp = resp.json()
                     authorization = resp['result']['value']['token']
                     print(authorization)
-                    resp = requests.put('http://192.168.157.10/user', data={'user':username, 'password':password, 'realm':'defrealm', 'resolve':'defsqlresolver'}, headers={"Authorization": authorization})
+                    resp = requests.put('http://192.168.157.10/user', data={'user':username, 'password':password, 'realm':'defrealm', 'resolver':'defsqlresolver'}, headers={"Authorization": authorization})
                     print(resp.json())
                     return redirect(url_for("index"))
 
