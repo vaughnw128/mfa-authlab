@@ -50,21 +50,23 @@ def login():
             return response
 
 @app.route('/authenticate_totp', methods=['POST'])
+@jwt_required()
 def authenticate_totp():
     print("lolol")
-    username = request.args['username']
+    #username = request.args['username']
     otp = int(request.form.get("otp"))
-    if otp is None:
-        error = "Please enter a value for the OTP."
-    else:
-        resp = requests.post('http://192.168.157.10/validate/check', data={'user': username, 'pass':otp, 'realm':'defrealm'})
-        resp = resp.json()
-        if resp['result']['authentication'] == "ACCEPT":
-            print("worked!")
-            response = redirect(url_for("profile", username=username))
-            #access_token = create_access_token(identity={"username": username, "authenticated": True})
-            #set_access_cookies(response, access_token)
-            return response
+    print(otp)
+    # if otp is None:
+    #     error = "Please enter a value for the OTP."
+    # else:
+    #     resp = requests.post('http://192.168.157.10/validate/check', data={'user': username, 'pass':otp, 'realm':'defrealm'})
+    #     resp = resp.json()
+    #     if resp['result']['authentication'] == "ACCEPT":
+    #         print("worked!")
+    #         response = redirect(url_for("profile", username=username))
+    #         #access_token = create_access_token(identity={"username": username, "authenticated": True})
+    #         #set_access_cookies(response, access_token)
+    #         return response
 
 @app.route('/authenticate', methods=['GET'])
 @jwt_required()
