@@ -20,7 +20,6 @@ jwt = JWTManager(app)
 # Route for handling the login page logic
 @app.route('/reset', methods=['GET', 'POST'])
 def reset():
-    error = None
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
@@ -28,12 +27,9 @@ def reset():
         if username and password and otp:
             resp = requests.post('http://192.168.157.10/validate/check', data={'user':username, 'pass':otp, 'realm':'defrealm'})
             resp = resp.json()
-            print(resp)
             if resp['result']['authentication'] == "ACCEPT":
-                flash("Password reset succesfully.")
-        else:
-            error = 'Please supply credentials.'
-    return render_template('reset_password.html', error=error, username=username)
+                resp = requests.put('http://192.168.157.10/user', data={'user':username, 'password':password, 'realm':'defrealm'})
+                return redirect(url_for("index"))
 
 # Route for handling the login page logic
 @app.route('/login', methods=['POST'])
