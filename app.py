@@ -32,11 +32,11 @@ def reset():
                 resp = requests.post('http://192.168.157.10/auth', data={'username':os.getenv("AUTH_ADMIN"), 'password':os.getenv("AUTH_PASSWORD"), 'realm':'defrealm'})
                 if resp.status_code == 200:
                     resp = resp.json()
-                    authorization = resp['result']['value']
+                    authorization = resp['result']['value']['token']
                     print(authorization)
-                # resp = requests.put('http://192.168.157.10/user', data={'user':username, 'password':password, 'realm':'defrealm'}, headers=f"Authorization: {authorization}")
-                # print(resp)
-                # return redirect(url_for("index"))
+                    resp = requests.put('http://192.168.157.10/user', data={'user':username, 'password':password, 'realm':'defrealm'}, headers=f"Authorization: {authorization}")
+                    print(resp)
+                    return redirect(url_for("index"))
 
 # Route for handling the login page logic
 @app.route('/login', methods=['POST'])
