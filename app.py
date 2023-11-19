@@ -66,6 +66,10 @@ def authenticate_totp():
             set_access_cookies(response, access_token)
             return response
 
+@app.route('/reset_password', methods=['GET'])
+def authenticate():
+    return render_template('reset_password.html')
+
 @app.route('/authenticate', methods=['GET'])
 @jwt_required()
 def authenticate():
