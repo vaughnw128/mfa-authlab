@@ -29,6 +29,7 @@ def reset():
             resp = resp.json()
             if resp['result']['authentication'] == "ACCEPT":
                 resp = requests.put('http://192.168.157.10/user', data={'user':username, 'password':password, 'realm':'defrealm'})
+                print(resp.json())
                 return redirect(url_for("index"))
 
 # Route for handling the login page logic
