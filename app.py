@@ -11,18 +11,14 @@ app.secret_key = 'TAKANAKA'
 @app.route('/login_2fa', methods=['GET', 'POST'])
 def login_2fa():
     error = None
-    print(request.method)
     if request.method == 'POST':
-
         username = request.args['username']
-        print(username)
         otp = int(request.form.get("otp"))
         if otp is None:
             error = "Please enter a value for the OTP."
         else:
-            resp = requests.post('http://192.168.157.10/validate/check', data={'user': username, 'pass':otp, 'type':'totp', 'serial':'TOTP00006F8E', 'realm':'defrealm'})
+            resp = requests.post('http://192.168.157.10/validate/check', data={'user': username, 'pass':otp, 'realm':'defrealm'})
             resp = resp.json()
-
             if resp['result']['authentication'] == "ACCEPT":
                 print("hello!")
                 #return redirect(url_for("profile", username=username))
