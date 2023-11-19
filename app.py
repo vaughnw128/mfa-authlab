@@ -35,7 +35,7 @@ def reset():
                     authorization = resp['result']['value']['token']
                     print(authorization)
                     resp = requests.put('http://192.168.157.10/user', data={'user':username, 'password':password, 'realm':'defrealm'}, headers={"Authorization": authorization})
-                    print(resp)
+                    print(resp.json())
                     return redirect(url_for("index"))
 
 # Route for handling the login page logic
