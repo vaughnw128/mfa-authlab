@@ -1,4 +1,4 @@
-from flask import Flask, render_template, redirect, url_for, request, flash, session, jsonify, request
+from flask import Flask, render_template, redirect, url_for, request, flash, session, jsonify, request, json
 import requests
 import os
 
@@ -30,9 +30,10 @@ def reset():
             resp = resp.json()
             if resp['result']['authentication'] == "ACCEPT":
                 resp = requests.post('http://192.168.157.10/auth', data={'username':os.getenv("AUTH_ADMIN"), 'password':os.getenv("AUTH_PASSWORD"), 'realm':'defrealm'})
-                print(resp)
-                authorization = resp.json()['result']['value']
-                print(authorization)
+                if resp.status_code == 200:
+                    resp = resp.json()
+                    authorization = resp['result']['value']
+                    print(authorization)
                 # resp = requests.put('http://192.168.157.10/user', data={'user':username, 'password':password, 'realm':'defrealm'}, headers=f"Authorization: {authorization}")
                 # print(resp)
                 # return redirect(url_for("index"))
