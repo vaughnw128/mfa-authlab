@@ -1,5 +1,6 @@
 from flask import Flask, render_template, redirect, url_for, request, flash, session, jsonify, request
 import requests
+import os
 
 from flask_jwt_extended import create_access_token
 from flask_jwt_extended import get_jwt_identity
@@ -27,8 +28,11 @@ def reset():
         if username and password and otp:
             resp = requests.post('http://192.168.157.10/validate/check', data={'user':username, 'pass':otp, 'realm':'defrealm'})
             resp = resp.json()
+            print(resp.json())
             if resp['result']['authentication'] == "ACCEPT":
-                resp = requests.put('http://192.168.157.10/user', data={'user':username, 'password':password, 'realm':'defrealm'})
+                resp = requests.post('http://192.168.157.10/auth', data={'username':os.getenv("AUTH_ADMIN"), 'password':os.getenv("AUTH_PASSWORD"), 'realm':'defrealm'})
+                authorization = resp.json()['result']['value']['token']
+                resp = requests.put('http://192.168.157.10/user', data={'user':username, 'password':password, 'realm':'defrealm'}, headers=f"Authorization: {authorization}")
                 print(resp.json())
                 return redirect(url_for("index"))
 
