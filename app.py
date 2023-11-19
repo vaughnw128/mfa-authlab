@@ -11,7 +11,7 @@ app.secret_key = 'TAKANAKA'
 @app.route('/login_2fa', methods=['GET', 'POST'])
 def login_2fa():
     error = None
-    print(request.method())
+    print(request.method)
     if request.method == 'POST':
 
         username = request.args['username']
