@@ -10,9 +10,11 @@ app.secret_key = 'TAKANAKA'
 
 @app.route('/login_2fa', methods=['GET', 'POST'])
 def login_2fa():
+    print("asdasd")
     error = None
     if request.method == 'POST':
         username = request.args['username']
+        print(username)
         otp = int(request.form.get("otp"))
         if otp is None:
             error = "Please enter a value for the OTP."
@@ -21,7 +23,8 @@ def login_2fa():
             resp = resp.json()
 
             if resp['result']['authentication'] == "ACCEPT":
-                return redirect(url_for("profile", username=username))
+                print("hello!")
+                #return redirect(url_for("profile", username=username))
 
     return render_template('login_2fa.html', error=error)
 
