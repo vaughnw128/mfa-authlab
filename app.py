@@ -15,7 +15,7 @@ app = Flask(__name__)
 app.config["JWT_SECRET_KEY"] = "TAKANAKA"
 app.config["JWT_COOKIE_SECURE"] = True
 app.config["JWT_TOKEN_LOCATION"] = ["cookies"]
-app.config["WTF_CSRF_CHECK_DEFAULT"] = False
+app.config["JWT_COOKIE_CSRF_PROTECT"] = False
 jwt = JWTManager(app)
 
 # Route for handling the login page logic
