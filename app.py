@@ -28,12 +28,11 @@ def reset():
         if username and password and otp:
             resp = requests.post('http://192.168.157.10/validate/check', data={'user':username, 'pass':otp, 'realm':'defrealm'})
             resp = resp.json()
-            print(resp.json())
             if resp['result']['authentication'] == "ACCEPT":
                 resp = requests.post('http://192.168.157.10/auth', data={'username':os.getenv("AUTH_ADMIN"), 'password':os.getenv("AUTH_PASSWORD"), 'realm':'defrealm'})
                 authorization = resp.json()['result']['value']['token']
                 resp = requests.put('http://192.168.157.10/user', data={'user':username, 'password':password, 'realm':'defrealm'}, headers=f"Authorization: {authorization}")
-                print(resp.json())
+                print(resp)
                 return redirect(url_for("index"))
 
 # Route for handling the login page logic
