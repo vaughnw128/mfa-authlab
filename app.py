@@ -18,8 +18,8 @@ app.config["JWT_COOKIE_CSRF_PROTECT"] = False
 jwt = JWTManager(app)
 
 # Route for handling the login page logic
-@app.route('/reset_password', methods=['GET', 'POST'])
-def reset_password():
+@app.route('/reset', methods=['GET', 'POST'])
+def reset():
     error = None
     if request.method == 'POST':
         username = request.form['username']
