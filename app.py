@@ -44,30 +44,30 @@ def login():
         resp = requests.post('http://192.168.157.10/auth', data={'username':username, 'password':password, 'realm':'defrealm'})
         resp = resp.json()
         if resp['result']['status']:
-            response = redirect(url_for("login_2fa", username=username))
+            response = redirect(url_for("authenticate", username=username))
             access_token = create_access_token(identity=username)
             set_access_cookies(response, access_token)
             return response
-        
-@app.route('/login_2fa', methods=['GET', 'POST'])
-@jwt_required()
-def login_2fa():
-    error = None
-    if request.method == 'POST':
-        username = request.args['username']
-        otp = int(request.form.get("otp"))
-        if otp is None:
-            error = "Please enter a value for the OTP."
-        else:
-            resp = requests.post('http://192.168.157.10/validate/check', data={'user': username, 'pass':otp, 'realm':'defrealm'})
-            resp = resp.json()
-            if resp['result']['authentication'] == "ACCEPT":
-                response = redirect(url_for("profile", username=username))
-                #access_token = create_access_token(identity={"username": username, "authenticated": True})
-                #set_access_cookies(response, access_token)
-                return response
 
-    return render_template('login_2fa.html', error=error)
+@app.route('/authenticate_totp', methods=['POST'])
+def authenticate_totp():
+    username = request.args['username']
+    otp = int(request.form.get("otp"))
+    if otp is None:
+        error = "Please enter a value for the OTP."
+    else:
+        resp = requests.post('http://192.168.157.10/validate/check', data={'user': username, 'pass':otp, 'realm':'defrealm'})
+        resp = resp.json()
+        if resp['result']['authentication'] == "ACCEPT":
+            response = redirect(url_for("profile", username=username))
+            #access_token = create_access_token(identity={"username": username, "authenticated": True})
+            #set_access_cookies(response, access_token)
+            return response
+
+@app.route('/authenticate', methods=['GET'])
+@jwt_required()
+def authenticate():
+    return render_template('authenticate.html')
 
 @app.route('/', methods=['GET'])
 def index():
