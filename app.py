@@ -1,10 +1,9 @@
 from flask import Flask, render_template, redirect, url_for, request, flash, session, jsonify, request
 import requests
-from flask_bootstrap import Bootstrap
-from flask_toastr import Toastr
 
 from flask_jwt_extended import create_access_token
 from flask_jwt_extended import get_jwt_identity
+from flask_jwt_extended import unset_access_cookies
 from flask_jwt_extended import jwt_required
 from flask_jwt_extended import JWTManager
 from flask_jwt_extended import set_access_cookies
@@ -45,7 +44,7 @@ def login():
         resp = requests.post('http://192.168.157.10/auth', data={'username':username, 'password':password, 'realm':'defrealm'})
         resp = resp.json()
         if resp['result']['status']:
-            response = redirect(url_for("authenticate", username=username))
+            response = redirect(url_for("authenticate"))
             access_token = create_access_token(identity={"username": username, "authenticated": False})
             set_access_cookies(response, access_token)
             return response
@@ -53,9 +52,8 @@ def login():
 @app.route('/authenticate_totp', methods=['POST'])
 @jwt_required()
 def authenticate_totp():
-    username = get_jwt_identity()
+    username = get_jwt_identity()['username']
     otp = int(request.form.get("otp"))
-    print(username)
     if otp is None:
         error = "Please enter a value for the OTP."
     else:
@@ -63,7 +61,7 @@ def authenticate_totp():
         resp = resp.json()
         if resp['result']['authentication'] == "ACCEPT":
             print("worked!")
-            response = redirect(url_for("profile", username=username))
+            response = redirect(url_for("profile"))
             access_token = create_access_token(identity={"username": username, "authenticated": True})
             set_access_cookies(response, access_token)
             return response
@@ -78,7 +76,16 @@ def index():
     return render_template('index.html')
 
 @app.route('/profile', methods=['GET'])
+@jwt_required()
 def profile():
+    username = get_jwt_identity()['username']
+    authenticated = get_jwt_identity()['authenticated']
+
+    if not authenticated:
+        response = redirect(url_for("index"))
+        unset_access_cookies(response)
+        return response
+    
     return render_template('profile.html')
 
 if __name__=='__main__':
