@@ -30,6 +30,7 @@ def reset():
             resp = resp.json()
             if resp['result']['authentication'] == "ACCEPT":
                 resp = requests.post('http://192.168.157.10/auth', data={'username':os.getenv("AUTH_ADMIN"), 'password':os.getenv("AUTH_PASSWORD"), 'realm':'defrealm'})
+                resp = resp.json()
                 authorization = resp.json()['result']['value']['token']
                 resp = requests.put('http://192.168.157.10/user', data={'user':username, 'password':password, 'realm':'defrealm'}, headers=f"Authorization: {authorization}")
                 print(resp)
