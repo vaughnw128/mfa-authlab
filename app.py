@@ -54,9 +54,10 @@ def login():
 @jwt_required()
 def authenticate_totp():
     print("lolol")
-    #username = request.args['username']
+    username = get_jwt_identity()
     otp = int(request.form.get("otp"))
     print(otp)
+    print(username)
     # if otp is None:
     #     error = "Please enter a value for the OTP."
     # else:
