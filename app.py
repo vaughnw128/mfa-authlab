@@ -17,24 +17,6 @@ app.config["JWT_COOKIE_SECURE"] = True
 app.config["JWT_TOKEN_LOCATION"] = ["cookies"]
 jwt = JWTManager(app)
 
-@app.route('/login_2fa', methods=['GET', 'POST'])
-@jwt_required()
-def login_2fa():
-    error = None
-    if request.method == 'POST':
-        username = request.args['username']
-        otp = int(request.form.get("otp"))
-        if otp is None:
-            error = "Please enter a value for the OTP."
-        else:
-            resp = requests.post('http://192.168.157.10/validate/check', data={'user': username, 'pass':otp, 'realm':'defrealm'})
-            resp = resp.json()
-            if resp['result']['authentication'] == "ACCEPT":
-                return redirect(url_for("profile", username=username))
-
-    return render_template('login_2fa.html', error=error)
-
-
 # Route for handling the login page logic
 @app.route('/reset_password', methods=['GET', 'POST'])
 def reset_password():
@@ -53,11 +35,6 @@ def reset_password():
             error = 'Please supply credentials.'
     return render_template('reset_password.html', error=error, username=username)
 
-
-@app.route('/', methods=['GET'])
-def index():
-    return render_template('index.html')
-
 # Route for handling the login page logic
 @app.route('/login', methods=['POST'])
 def login():
@@ -71,7 +48,30 @@ def login():
             access_token = create_access_token(identity=username)
             set_access_cookies(response, access_token)
             return response
+        
+@app.route('/login_2fa', methods=['GET', 'POST'])
+@jwt_required()
+def login_2fa():
+    error = None
+    if request.method == 'POST':
+        username = request.args['username']
+        otp = int(request.form.get("otp"))
+        if otp is None:
+            error = "Please enter a value for the OTP."
+        else:
+            resp = requests.post('http://192.168.157.10/validate/check', data={'user': username, 'pass':otp, 'realm':'defrealm'})
+            resp = resp.json()
+            if resp['result']['authentication'] == "ACCEPT":
+                response = redirect(url_for("profile", username=username))
+                access_token = create_access_token(identity={"username": username, "authenticated": True})
+                set_access_cookies(response, access_token)
+                return response
 
+    return render_template('login_2fa.html', error=error)
+
+@app.route('/', methods=['GET'])
+def index():
+    return render_template('index.html')
 
 if __name__=='__main__':
     app.run(port="8080", host="0.0.0.0")
