@@ -35,7 +35,7 @@ def reset_password():
         password = request.form['password']
         otp = request.form['otp']
         if username and password and otp:
-            resp = requests.post('http://192.168.157.10/validate/check', data={'user':username, 'pass':otp, 'type':'totp', 'serial':'TOTP00006F8E', 'realm':'defrealm'})
+            resp = requests.post('http://192.168.157.10/validate/check', data={'user':username, 'pass':otp, 'realm':'defrealm'})
             resp = resp.json()
             print(resp)
             if resp['result']['authentication'] == "ACCEPT":
