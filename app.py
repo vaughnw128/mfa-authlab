@@ -67,7 +67,7 @@ def authenticate_totp():
             return response
 
 @app.route('/reset_password', methods=['GET'])
-def authenticate():
+def reset_password():
     return render_template('reset_password.html')
 
 @app.route('/authenticate', methods=['GET'])
