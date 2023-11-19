@@ -42,7 +42,7 @@ def reset_password():
                 flash("Password reset succesfully.")
         else:
             error = 'Please supply credentials.'
-    return render_template('reset_password.html', error=error)
+    return render_template('reset_password.html', error=error, username=username)
 
 
 @app.route('/', methods=['GET'])
