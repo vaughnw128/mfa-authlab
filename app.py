@@ -30,11 +30,11 @@ def reset():
             resp = resp.json()
             if resp['result']['authentication'] == "ACCEPT":
                 resp = requests.post('http://192.168.157.10/auth', data={'username':os.getenv("AUTH_ADMIN"), 'password':os.getenv("AUTH_PASSWORD"), 'realm':'defrealm'})
-                resp = resp.json()
-                authorization = resp.json()['result']['value']['token']
-                resp = requests.put('http://192.168.157.10/user', data={'user':username, 'password':password, 'realm':'defrealm'}, headers=f"Authorization: {authorization}")
-                print(resp)
-                return redirect(url_for("index"))
+                print(resp.json())
+                # authorization = resp.json()['result']['value']['token']
+                # resp = requests.put('http://192.168.157.10/user', data={'user':username, 'password':password, 'realm':'defrealm'}, headers=f"Authorization: {authorization}")
+                # print(resp)
+                # return redirect(url_for("index"))
 
 # Route for handling the login page logic
 @app.route('/login', methods=['POST'])
