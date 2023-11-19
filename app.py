@@ -63,8 +63,8 @@ def login_2fa():
             resp = resp.json()
             if resp['result']['authentication'] == "ACCEPT":
                 response = redirect(url_for("profile", username=username))
-                access_token = create_access_token(identity={"username": username, "authenticated": True})
-                set_access_cookies(response, access_token)
+                #access_token = create_access_token(identity={"username": username, "authenticated": True})
+                #set_access_cookies(response, access_token)
                 return response
 
     return render_template('login_2fa.html', error=error)
@@ -72,6 +72,10 @@ def login_2fa():
 @app.route('/', methods=['GET'])
 def index():
     return render_template('index.html')
+
+@app.route('/profile', methods=['GET'])
+def profile():
+    return render_template('profile.html')
 
 if __name__=='__main__':
     app.run(port="8080", host="0.0.0.0")
