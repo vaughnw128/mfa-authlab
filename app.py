@@ -51,6 +51,7 @@ def login():
 
 @app.route('/authenticate_totp', methods=['POST'])
 def authenticate_totp():
+    print("lolol")
     username = request.args['username']
     otp = int(request.form.get("otp"))
     if otp is None:
