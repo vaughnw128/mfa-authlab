@@ -27,6 +27,7 @@ def refresh_expiring_jwts(response):
     try:
         now = datetime.now(timezone.utc)
         exp_timestamp = get_jwt()["exp"]
+        exp_timestamp = datetime.fromtimestamp(exp_timestamp)
         print(now)
         print(exp_timestamp)
         if int(now) > exp_timestamp:
