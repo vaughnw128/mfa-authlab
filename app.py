@@ -62,7 +62,8 @@ def authenticate_totp():
     username = get_jwt_identity()['username']
     otp = int(request.form.get("otp"))
     if otp is None:
-        error = "Please enter a value for the OTP."
+        flash("Please enter a pin.", category="danger")
+        response = redirect(url_for("authenticate"))
     else:
         resp = requests.post('http://192.168.157.10/validate/check', data={'user': username, 'pass':otp, 'realm':'defrealm'})
         resp = resp.json()
@@ -72,6 +73,9 @@ def authenticate_totp():
             access_token = create_access_token(identity={"username": username, "authenticated": True})
             set_access_cookies(response, access_token)
             return response
+        else:
+            flash("Invalid TOTP", category="danger")
+            response = redirect(url_for("authenticate"))
 
 @app.route('/reset_password', methods=['GET'])
 def reset_password():
