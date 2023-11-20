@@ -27,6 +27,8 @@ def refresh_expiring_jwts(response):
     try:
         now = datetime.now(timezone.utc)
         exp_timestamp = get_jwt()["exp"]
+        print(now)
+        print(exp_timestamp)
         if int(now) > exp_timestamp:
             unset_access_cookies(response)
         return response
