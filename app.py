@@ -64,6 +64,11 @@ def login():
         else:
             flash("Invalid credentials.", category="danger")
             return redirect(url_for('index'))
+    else:
+        flash("Please supply values for all fields", category="warning")
+        response = redirect(url_for("index"))
+        return response
+        
 
 @app.route('/authenticate_totp', methods=['POST'])
 @jwt_required()
