@@ -60,12 +60,12 @@ def login():
 @jwt_required()
 def authenticate_totp():
     username = get_jwt_identity()['username']
-    otp = int(request.form.get("otp"))
+    otp = request.form.get("otp")
     if otp is None:
         flash("Please enter a pin.", category="danger")
         response = redirect(url_for("authenticate"))
     else:
-        resp = requests.post('http://192.168.157.10/validate/check', data={'user': username, 'pass':otp, 'realm':'defrealm'})
+        resp = requests.post('http://192.168.157.10/validate/check', data={'user': username, 'pass':int(otp), 'realm':'defrealm'})
         resp = resp.json()
         if resp['result']['authentication'] == "ACCEPT":
             print("worked!")
