@@ -11,13 +11,51 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
     <title>Navbar in Flask</title>
+
+    <style>
+        .row {
+            display: flex;
+            flex-wrap: wrap;
+            padding: 0 4px;
+        }
+
+        /* Create four equal columns that sits next to each other */
+        .column {
+            flex: 25%;
+            max-width: 25%;
+            padding: 0 4px;
+        }
+
+        .column img {
+            margin-top: 8px;
+            vertical-align: middle;
+            width: 100%;
+        }
+
+        /* Responsive layout - makes a two column-layout instead of four columns */
+        @media screen and (max-width: 800px) {
+            .column {
+                flex: 50%;
+                max-width: 50%;
+            }
+        }
+
+        /* Responsive layout - makes the two columns stack on top of each other instead of next to each other */
+        @media screen and (max-width: 600px) {
+            .column {
+                flex: 100%;
+                max-width: 100%;
+            }
+        }
+    
+    </style>
 </head>
 
 <body>
 
 <div class="container">
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <a class="navbar-brand" href="#">Hello, profile_name!</a>
+    <a class="navbar-brand" href="#">Welcome to your PNG vault!</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
@@ -35,6 +73,32 @@
 </nav>
 </div>
 
-Hello world!
+<div class="row">
+    <div class="column">
+        <img src="static/images/1.png">
+        <img src="static/images/2.jpg">
+        <img src="static/images/3.jpg">
+        <img src="static/images/4.png">
+    </div>
+    <div class="column">
+        <img src="static/images/5.jpg">
+        <img src="static/images/6.png">
+        <img src="static/images/7.jpg">
+        <img src="static/images/8.png">
+    </div>
+    <div class="column">
+        <img src="static/images/9.jpg">
+        <img src="static/images/10.png">
+        <img src="static/images/11.jpg">
+        <img src="static/images/12.jpg">
+    </div>
+    <div class="column">
+        <img src="static/images/13.png">
+        <img src="static/images/14.png">
+        <img src="static/images/15.jpg">
+        <img src="static/images/16.jpg">
+    </div>
+  </div>
+
 </body>
 {% endblock %}
