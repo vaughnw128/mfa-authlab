@@ -78,6 +78,7 @@ Make sure to not set the PIN/Password, or it will require a pin in conjunction w
 
 On the next page, it privacyIDEA will show you the QR code. Scanning the QR code with Google Authenticator, it can then be used for authentication.
 
+## Website
 
 Set your environment variables:
 
@@ -87,3 +88,13 @@ export AUTH_ADMIN=VALUE
 export AUTH_PASSWORD=VALUE
 ```
 
+Install the requirements:
+
+```bash
+pip3 install -r requirements.txt
+```
+
+Now run it!
+```bash
+python3 app.py
+```
