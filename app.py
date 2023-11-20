@@ -18,6 +18,7 @@ app.config["JWT_SECRET_KEY"] = os.getenv("JWT_SECRET_KEY")
 app.config["JWT_COOKIE_SECURE"] = True
 app.config["JWT_TOKEN_LOCATION"] = ["cookies"]
 app.config["JWT_COOKIE_CSRF_PROTECT"] = False
+app.secret_key = os.getenv("APP_SECRET_KEY")
 jwt = JWTManager(app)
 
 # Route for handling the login page logic
