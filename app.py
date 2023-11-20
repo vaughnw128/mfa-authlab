@@ -33,6 +33,12 @@ def refresh_expiring_jwts(response):
         return response
     except (RuntimeError, KeyError):
         return response
+    except Exception:
+        try:
+            unset_access_cookies(response)
+            return response
+        except Exception:
+            return response
 
 @app.route('/logout', methods=['GET'])
 @jwt_required(optional=True)
