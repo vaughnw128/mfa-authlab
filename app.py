@@ -34,6 +34,18 @@ def refresh_expiring_jwts(response):
     except (RuntimeError, KeyError):
         return response
 
+@app.route('/logout', methods=['GET'])
+@jwt_required(optional=True)
+def logout():
+    try:
+        jwt = get_jwt()
+        response = redirect(url_for("index"))
+        unset_access_cookies(response)
+        return response
+    except Exception:
+        flash("Password successfully reset", category="success")
+        return redirect(url_for("index"))
+
 # Route for handling the login page logic
 @app.route('/reset', methods=['GET', 'POST'])
 def reset():
