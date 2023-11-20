@@ -41,9 +41,10 @@ def logout():
         jwt = get_jwt()
         response = redirect(url_for("index"))
         unset_access_cookies(response)
+        flash("Bye bye!", category="success")
         return response
     except Exception:
-        flash("Password successfully reset", category="success")
+        flash("Bye bye!", category="success")
         return redirect(url_for("index"))
 
 # Route for handling the login page logic
