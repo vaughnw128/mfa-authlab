@@ -84,6 +84,7 @@ def authenticate_totp():
         else:
             flash("Invalid TOTP", category="danger")
             response = redirect(url_for("authenticate"))
+            return response
 
 @app.route('/reset_password', methods=['GET'])
 def reset_password():
