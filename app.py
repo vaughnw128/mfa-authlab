@@ -121,12 +121,12 @@ def authenticate():
 @app.route('/', methods=['GET'])
 @jwt_required(optional=True)
 def index():
-    print(get_jwt_identity())
-    username = get_jwt_identity()['username']
-    authenticated = get_jwt_identity()['authenticated']
+    identity = get_jwt_identity()
+    if identity is not None:
+        authenticated = identity['authenticated']
 
-    if authenticated:
-        return redirect(url_for("profile"))
+        if authenticated:
+            return redirect(url_for("profile"))
     
     return render_template('index.html')
 
@@ -135,14 +135,15 @@ def index():
 def profile():
     identity = get_jwt_identity()
     if identity is not None:
-        authenticated = identity['authenticated']
+        authenticated = get_jwt_identity()['authenticated']
 
         if not authenticated:
             response = redirect(url_for("index"))
             unset_access_cookies(response)
             return response
-    
-    return render_template('profile.html')
+        
+        return render_template('profile.html')
+    response = redirect(url_for("index"))
 
 if __name__=='__main__':
     app.run(port="8080", host="0.0.0.0")
