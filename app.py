@@ -22,6 +22,7 @@ jwt = JWTManager(app)
 # minutes of expiring. Change the timedeltas to match the needs of your application.
 @app.after_request
 def refresh_expiring_jwts(response):
+    print("lolol")
     try:
         exp_timestamp = get_jwt()["exp"]
         now = datetime.now(timezone.utc)
