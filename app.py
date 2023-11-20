@@ -25,12 +25,12 @@ jwt = JWTManager(app)
 @jwt_required(optional=True)
 def refresh_expiring_jwts(response):
     try:
+        now = datetime.now(timezone.utc)
         exp_timestamp = get_jwt()["exp"]
-        print(exp_timestamp)
+        if now > exp_timestamp:
+            unset_access_cookies(response)
         return response
     except (RuntimeError, KeyError):
-        return response
-    except Exception:
         return response
 
 # Route for handling the login page logic
