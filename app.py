@@ -1,6 +1,7 @@
 from flask import Flask, render_template, redirect, url_for, request, flash, session, jsonify, request, json
 import requests
 import os
+from dotenv import load_dotenv
 
 from flask_jwt_extended import create_access_token
 from flask_jwt_extended import get_jwt_identity
@@ -10,6 +11,7 @@ from flask_jwt_extended import JWTManager
 from flask_jwt_extended import set_access_cookies
 
 app = Flask(__name__)
+load_dotenv()
 
 # Setup the Flask-JWT-Extended extension
 app.config["JWT_SECRET_KEY"] = os.getenv("JWT_SECRET_KEY")
@@ -33,7 +35,6 @@ def reset():
                 if resp.status_code == 200:
                     resp = resp.json()
                     authorization = resp['result']['value']['token']
-                    print(authorization)
                     resp = requests.put('http://192.168.157.10/user', data={'user':username, 'password':password, 'realm':'defrealm', 'resolver':'defsqlresolver'}, headers={"Authorization": authorization})
                     print(resp.json())
                     return redirect(url_for("index"))
@@ -62,7 +63,6 @@ def authenticate_totp():
     else:
         resp = requests.post('http://192.168.157.10/validate/check', data={'user': username, 'pass':otp, 'realm':'defrealm'})
         resp = resp.json()
-        print(resp)
         if resp['result']['authentication'] == "ACCEPT":
             print("worked!")
             response = redirect(url_for("profile"))
