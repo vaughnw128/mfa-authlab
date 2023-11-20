@@ -1,6 +1,5 @@
 from flask import Flask, render_template, redirect, url_for, request, flash, session, jsonify, request
 from flask_jwt_extended import create_access_token, get_jwt_identity, verify_jwt_in_request, unset_access_cookies, jwt_required, JWTManager, set_access_cookies, get_jwt
-from jwt.exceptions import ExpiredSignatureError
 import requests
 import os
 from dotenv import load_dotenv
@@ -29,7 +28,7 @@ def refresh_expiring_jwts(response):
         exp_timestamp = get_jwt()["exp"]
         print(exp_timestamp)
         return response
-    except (RuntimeError, KeyError, ExpiredSignatureError):
+    except (RuntimeError, KeyError):
         return response
 
 # Route for handling the login page logic
