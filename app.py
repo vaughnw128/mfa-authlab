@@ -1,15 +1,11 @@
-from flask import Flask, render_template, redirect, url_for, request, flash, session, jsonify, request, json
+from flask import Flask, render_template, redirect, url_for, request, flash, session, jsonify, request
+from flask_jwt_extended import create_access_token, get_jwt_identity, unset_access_cookies, jwt_required, JWTManager, set_access_cookies, get_jwt
 import requests
 import os
 from dotenv import load_dotenv
-
-from flask_jwt_extended import create_access_token
-from flask_jwt_extended import get_jwt_identity
-from flask_jwt_extended import unset_access_cookies
-from flask_jwt_extended import jwt_required
-from flask_jwt_extended import JWTManager
-from flask_jwt_extended import set_access_cookies
-from flask_jwt_extended import verify_jwt_in_request
+from datetime import datetime
+from datetime import timedelta
+from datetime import timezone
 
 app = Flask(__name__)
 load_dotenv()
@@ -21,6 +17,21 @@ app.config["JWT_TOKEN_LOCATION"] = ["cookies"]
 app.config["JWT_COOKIE_CSRF_PROTECT"] = False
 app.secret_key = os.getenv("APP_SECRET_KEY")
 jwt = JWTManager(app)
+
+# Using an `after_request` callback, we refresh any token that is within 30
+# minutes of expiring. Change the timedeltas to match the needs of your application.
+@app.after_request
+def refresh_expiring_jwts(response):
+    try:
+        exp_timestamp = get_jwt()["exp"]
+        now = datetime.now(timezone.utc)
+        target_timestamp = datetime.timestamp(now + timedelta(minutes=30))
+        if target_timestamp > exp_timestamp:
+            access_token = create_access_token(identity=get_jwt_identity())
+            set_access_cookies(response, access_token)
+        return response
+    except (RuntimeError, KeyError):
+        return response
 
 # Route for handling the login page logic
 @app.route('/reset', methods=['GET', 'POST'])
