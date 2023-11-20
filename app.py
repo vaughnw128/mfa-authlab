@@ -37,8 +37,17 @@ def reset():
                     resp = resp.json()
                     authorization = resp['result']['value']['token']
                     resp = requests.put('http://192.168.157.10/user', data={'user':username, 'password':password, 'realm':'defrealm', 'resolver':'defsqlresolver'}, headers={"Authorization": authorization})
+                    flash("Password successfully reset", category="success")
                     return redirect(url_for("index"))
-
+            else:
+                flash("Invalid TOTP", category="danger")
+                response = redirect(url_for("reset"))
+                return response
+        else:
+            flash("Please supply values for all fields", category="warning")
+            response = redirect(url_for("reset"))
+            return response
+        
 # Route for handling the login page logic
 @app.route('/login', methods=['POST'])
 def login():
@@ -61,22 +70,19 @@ def login():
 def authenticate_totp():
     username = get_jwt_identity()['username']
     otp = request.form.get("otp")
-    print(f"OTP: {otp}")
-    print(type(otp))
     try:
         otp = int(otp)
     except Exception:
         otp = None
     
     if not otp:
-        flash("Please enter a pin.", category="danger")
+        flash("Please enter a pin", category="warning")
         response = redirect(url_for("authenticate"))
         return response
     else:
         resp = requests.post('http://192.168.157.10/validate/check', data={'user': username, 'pass':otp, 'realm':'defrealm'})
         resp = resp.json()
         if resp['result']['authentication'] == "ACCEPT":
-            print("worked!")
             response = redirect(url_for("profile"))
             access_token = create_access_token(identity={"username": username, "authenticated": True})
             set_access_cookies(response, access_token)
