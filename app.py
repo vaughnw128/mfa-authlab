@@ -61,6 +61,7 @@ def reset():
     if username and password and otp:
         resp = requests.post('http://192.168.157.10/validate/check', data={'user':username, 'pass':otp, 'realm':'defrealm'})
         resp = resp.json()
+        print(resp)
         try:
             if resp['result']['authentication'] == "ACCEPT":
                 resp = requests.post('http://192.168.157.10/auth', data={'username':os.getenv("AUTH_ADMIN"), 'password':os.getenv("AUTH_PASSWORD"), 'realm':'defrealm'})
