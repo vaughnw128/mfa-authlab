@@ -30,26 +30,47 @@
 
     <link href="/static/css/signin.css" rel="stylesheet">
   </head>
-<body class="text-center">
-  <main class="form-signin">
-    <form action="/login" method="POST">
-      <h1 class="h3 mb-3 fw-normal">Please log in</h1>
+  <body class="text-center">
 
-      <div class="form-floating">
-        <input type="username" name="username" class="form-control" id="floatingInput" placeholder="Username">
-        <label for="floatingInput">Username</label>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <a class="navbar-brand" href="#">Authentication MFA Demo</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav">
+            <li class="nav-item active">
+                <a class="nav-link" href="/">Login<span class="sr-only"></span></a>
+            </li>
+            <li class="nav-item active">
+            <a class="nav-link" href="profile">Profile<span class="sr-only"></span></a>
+            </li>
+            <li class="nav-item active">
+            <a class="nav-link" href="reset_password">Reset Password<span class="sr-only"></span></a>
+            </li>
+        </ul>
       </div>
-      <div class="form-floating">
-        <input type="password" name="password" class="form-control" id="floatingPassword" placeholder="Password">
-        <label for="floatingPassword">Password</label>
-      </div>
+    </nav>
 
-      <br>
+    <main class="form-signin">
+      <form action="/login" method="POST">
+        <h1 class="h3 mb-3 fw-normal">Please log in</h1>
 
-      <button class="w-100 btn btn-lg btn-primary" type="submit">Log in</button>
-    </form>
-    <a href="{{ url_for('reset_password') }}" class="mt-5 mb-3 text-muted"> Reset Password </a>
-  </main>
-</body>
+        <div class="form-floating">
+          <input type="username" name="username" class="form-control" id="floatingInput" placeholder="Username">
+          <label for="floatingInput">Username</label>
+        </div>
+        <div class="form-floating">
+          <input type="password" name="password" class="form-control" id="floatingPassword" placeholder="Password">
+          <label for="floatingPassword">Password</label>
+        </div>
+
+        <br>
+
+        <button class="w-100 btn btn-lg btn-primary" type="submit">Log in</button>
+      </form>
+      <a href="{{ url_for('reset_password') }}" class="mt-5 mb-3 text-muted"> Reset Password </a>
+    </main>
+  </body>
 
 {% endblock %}
