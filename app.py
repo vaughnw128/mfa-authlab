@@ -15,6 +15,7 @@ app.config["JWT_SECRET_KEY"] = os.getenv("JWT_SECRET_KEY")
 app.config["JWT_COOKIE_SECURE"] = True
 app.config["JWT_TOKEN_LOCATION"] = ["cookies"]
 app.config["JWT_COOKIE_CSRF_PROTECT"] = False
+app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(hours=1)
 app.secret_key = os.getenv("APP_SECRET_KEY")
 jwt = JWTManager(app)
 
@@ -23,7 +24,6 @@ jwt = JWTManager(app)
 @app.after_request
 @verify_jwt_in_request
 def refresh_expiring_jwts(response):
-    print("hello")
     t = get_jwt()
     try:
         exp_timestamp = get_jwt()["exp"]
