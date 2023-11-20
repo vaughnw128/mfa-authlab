@@ -60,10 +60,7 @@ def login():
 @jwt_required()
 def authenticate_totp():
     username = get_jwt_identity()['username']
-    try:
-        otp = request.form.get("otp")
-    except Exception:
-        print("lolol")
+    otp = request.form.get("otp")
     if len(otp) == 0:
         flash("Please enter a pin.", category="danger")
         response = redirect(url_for("authenticate"))
