@@ -120,6 +120,13 @@ def authenticate():
 
 @app.route('/', methods=['GET'])
 def index():
+    print(get_jwt_identity())
+    username = get_jwt_identity()['username']
+    authenticated = get_jwt_identity()['authenticated']
+
+    if authenticated:
+        return redirect(url_for("profile"))
+    
     return render_template('index.html')
 
 @app.route('/profile', methods=['GET'])
