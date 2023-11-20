@@ -63,7 +63,7 @@ def authenticate_totp():
     otp = request.form.get("otp")
     print(f"OTP: {otp}")
     print(type(otp))
-    if len(otp) == 0:
+    if otp is None or len(otp) == 0:
         flash("Please enter a pin.", category="danger")
         response = redirect(url_for("authenticate"))
     else:
