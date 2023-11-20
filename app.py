@@ -28,7 +28,7 @@ def refresh_expiring_jwts(response):
         exp_timestamp = get_jwt()["exp"]
         print(exp_timestamp)
         return response
-    except (RuntimeError, KeyError, jwt.ExpiredSignatureError):
+    except (RuntimeError, KeyError, jwt.exceptions.ExpiredSignatureError):
         return response
 
 # Route for handling the login page logic
