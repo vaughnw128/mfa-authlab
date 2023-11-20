@@ -119,6 +119,7 @@ def authenticate():
     return render_template('authenticate.html')
 
 @app.route('/', methods=['GET'])
+@jwt_required(optional=True)
 def index():
     print(get_jwt_identity())
     username = get_jwt_identity()['username']
