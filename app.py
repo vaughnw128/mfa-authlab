@@ -61,14 +61,19 @@ def reset():
     if username and password and otp:
         resp = requests.post('http://192.168.157.10/validate/check', data={'user':username, 'pass':otp, 'realm':'defrealm'})
         resp = resp.json()
-        if resp['result']['authentication'] == "ACCEPT":
-            resp = requests.post('http://192.168.157.10/auth', data={'username':os.getenv("AUTH_ADMIN"), 'password':os.getenv("AUTH_PASSWORD"), 'realm':'defrealm'})
-            if resp.status_code == 200:
-                resp = resp.json()
-                authorization = resp['result']['value']['token']
-                resp = requests.put('http://192.168.157.10/user', data={'user':username, 'password':password, 'realm':'defrealm', 'resolver':'defsqlresolver'}, headers={"Authorization": authorization})
-                flash("Password successfully reset", category="success")
-                return redirect(url_for("index"))
+        try:
+            if resp['result']['authentication'] == "ACCEPT":
+                resp = requests.post('http://192.168.157.10/auth', data={'username':os.getenv("AUTH_ADMIN"), 'password':os.getenv("AUTH_PASSWORD"), 'realm':'defrealm'})
+                if resp.status_code == 200:
+                    resp = resp.json()
+                    authorization = resp['result']['value']['token']
+                    resp = requests.put('http://192.168.157.10/user', data={'user':username, 'password':password, 'realm':'defrealm', 'resolver':'defsqlresolver'}, headers={"Authorization": authorization})
+                    flash("Password successfully reset", category="success")
+                    return redirect(url_for("index"))
+        except Exception:
+            flash("Invalid TOTP or User", category="danger")
+            response = redirect(url_for("reset_password"))
+            return response
         else:
             flash("Invalid TOTP", category="danger")
             response = redirect(url_for("reset_password"))
