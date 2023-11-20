@@ -101,3 +101,11 @@ python3 app.py
 ```
 
 This can also be configured with systemd to run as a service.
+
+## MFA Setup Instructions
+
+Take the provided QR code, and scan it with an MFA app. Google Authenticator has been tested and verified to work. Then, login with the provided credentials, and use the one time pin to access the profile page.
+
+## Password Reset Instructions
+
+Nagivate to the password reset page from either the login page or from the profile page. Then, enter the username of the account, the new password, and the OTP from your Authenticator app.
