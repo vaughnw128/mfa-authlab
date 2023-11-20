@@ -36,7 +36,6 @@ def reset():
                     resp = resp.json()
                     authorization = resp['result']['value']['token']
                     resp = requests.put('http://192.168.157.10/user', data={'user':username, 'password':password, 'realm':'defrealm', 'resolver':'defsqlresolver'}, headers={"Authorization": authorization})
-                    print(resp.json())
                     return redirect(url_for("index"))
 
 # Route for handling the login page logic
@@ -52,6 +51,9 @@ def login():
             access_token = create_access_token(identity={"username": username, "authenticated": False})
             set_access_cookies(response, access_token)
             return response
+        else:
+            flash("Invalid credentials.")
+            return redirect(url_for('index'))
 
 @app.route('/authenticate_totp', methods=['POST'])
 @jwt_required()
