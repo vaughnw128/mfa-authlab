@@ -55,30 +55,28 @@ def logout():
 
 @app.route('/reset', methods=['POST'])
 def reset():
-    if request.method == 'POST':
-        username = request.form['username']
-        password = request.form['password']
-        otp = request.form['otp']
-        if username and password and otp:
-            resp = requests.post('http://192.168.157.10/validate/check', data={'user':username, 'pass':otp, 'realm':'defrealm'})
-            resp = resp.json()
-            if resp['result']['authentication'] == "ACCEPT":
-                resp = requests.post('http://192.168.157.10/auth', data={'username':os.getenv("AUTH_ADMIN"), 'password':os.getenv("AUTH_PASSWORD"), 'realm':'defrealm'})
-                if resp.status_code == 200:
-                    resp = resp.json()
-                    authorization = resp['result']['value']['token']
-                    resp = requests.put('http://192.168.157.10/user', data={'user':username, 'password':password, 'realm':'defrealm', 'resolver':'defsqlresolver'}, headers={"Authorization": authorization})
-                    flash("Password successfully reset", category="success")
-                    return redirect(url_for("index"))
-            else:
-                flash("Invalid TOTP", category="danger")
-                response = redirect(url_for("reset"))
-                return response
+    username = request.form['username']
+    password = request.form['password']
+    otp = request.form['otp']
+    if username and password and otp:
+        resp = requests.post('http://192.168.157.10/validate/check', data={'user':username, 'pass':otp, 'realm':'defrealm'})
+        resp = resp.json()
+        if resp['result']['authentication'] == "ACCEPT":
+            resp = requests.post('http://192.168.157.10/auth', data={'username':os.getenv("AUTH_ADMIN"), 'password':os.getenv("AUTH_PASSWORD"), 'realm':'defrealm'})
+            if resp.status_code == 200:
+                resp = resp.json()
+                authorization = resp['result']['value']['token']
+                resp = requests.put('http://192.168.157.10/user', data={'user':username, 'password':password, 'realm':'defrealm', 'resolver':'defsqlresolver'}, headers={"Authorization": authorization})
+                flash("Password successfully reset", category="success")
+                return redirect(url_for("index"))
         else:
-            flash("Please supply values for all fields", category="warning")
+            flash("Invalid TOTP", category="danger")
             response = redirect(url_for("reset"))
             return response
-    return render_template('reset_password.html')
+    else:
+        flash("Please supply values for all fields", category="warning")
+        response = redirect(url_for("reset"))
+        return response
         
 # Route for handling the login page logic
 @app.route('/login', methods=['POST'])
