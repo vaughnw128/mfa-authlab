@@ -133,13 +133,14 @@ def index():
 @app.route('/profile', methods=['GET'])
 @jwt_required()
 def profile():
-    username = get_jwt_identity()['username']
-    authenticated = get_jwt_identity()['authenticated']
+    identity = get_jwt_identity()
+    if identity is not None:
+        authenticated = identity['authenticated']
 
-    if not authenticated:
-        response = redirect(url_for("index"))
-        unset_access_cookies(response)
-        return response
+        if not authenticated:
+            response = redirect(url_for("index"))
+            unset_access_cookies(response)
+            return response
     
     return render_template('profile.html')
 
