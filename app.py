@@ -71,6 +71,7 @@ def authenticate_totp():
     if not otp:
         flash("Please enter a pin.", category="danger")
         response = redirect(url_for("authenticate"))
+        return response
     else:
         resp = requests.post('http://192.168.157.10/validate/check', data={'user': username, 'pass':otp, 'realm':'defrealm'})
         resp = resp.json()
