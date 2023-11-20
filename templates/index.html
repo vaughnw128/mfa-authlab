@@ -16,7 +16,7 @@
       {% if messages %}
         {% for category, message in messages %}
           <div class="alert alert-{{ category }} alert-dismissible" role="alert">
-          <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <i class="close icon" onclick=delete_flash(this)></i>
           <!-- <strong>Title</strong> --> {{ message }}
           </div>
         {% endfor %}
@@ -41,5 +41,13 @@
     <a href="{{ url_for('reset_password') }}" class="mt-5 mb-3 text-muted"> Reset Password </a>
   </main>
 </body>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+<script>
+    function delete_flash(flash){
+        $(flash).parent().remove()
+    }
+</script>
+
 
 {% endblock %}
