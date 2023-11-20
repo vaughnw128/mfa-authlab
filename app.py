@@ -26,11 +26,8 @@ jwt = JWTManager(app)
 def refresh_expiring_jwts(response):
     try:
         now = datetime.now(timezone.utc)
-        exp_timestamp = get_jwt()["exp"]
-        #exp_timestamp = datetime.fromtimestamp(exp_timestamp)
         now = int(round(now.timestamp()))
-        print(now)
-        print(exp_timestamp)
+        exp_timestamp = get_jwt()["exp"]
         if now > exp_timestamp:
             unset_access_cookies(response)
         return response
