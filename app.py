@@ -61,6 +61,7 @@ def login():
 def authenticate_totp():
     username = get_jwt_identity()['username']
     otp = request.form.get("otp")
+    print(otp)
     if len(otp) == 0:
         flash("Please enter a pin.", category="danger")
         response = redirect(url_for("authenticate"))
