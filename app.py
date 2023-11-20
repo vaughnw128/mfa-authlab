@@ -71,11 +71,11 @@ def reset():
                 return redirect(url_for("index"))
         else:
             flash("Invalid TOTP", category="danger")
-            response = redirect(url_for("reset"))
+            response = redirect(url_for("reset_password"))
             return response
     else:
         flash("Please supply values for all fields", category="warning")
-        response = redirect(url_for("reset"))
+        response = redirect(url_for("reset_password"))
         return response
         
 # Route for handling the login page logic
