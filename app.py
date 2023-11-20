@@ -53,8 +53,7 @@ def logout():
         flash("Bye bye!", category="success")
         return redirect(url_for("index"))
 
-# Route for handling the login page logic
-@app.route('/reset', methods=['GET', 'POST'])
+@app.route('/reset', methods=['POST'])
 def reset():
     if request.method == 'POST':
         username = request.form['username']
@@ -79,7 +78,7 @@ def reset():
             flash("Please supply values for all fields", category="warning")
             response = redirect(url_for("reset"))
             return response
-    return response
+    return render_template('reset_password.html')
         
 # Route for handling the login page logic
 @app.route('/login', methods=['POST'])
