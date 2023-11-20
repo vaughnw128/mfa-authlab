@@ -1,5 +1,5 @@
-from flask import ExpiredSignatureError, Flask, render_template, redirect, url_for, request, flash, session, jsonify, request
-from flask_jwt_extended import create_access_token, get_jwt_identity, verify_jwt_in_request, unset_access_cookies, jwt_required, JWTManager, set_access_cookies, get_jwt
+from flask import Flask, render_template, redirect, url_for, request, flash, session, jsonify, request
+from flask_jwt_extended import ExpiredSignatureError, create_access_token, get_jwt_identity, verify_jwt_in_request, unset_access_cookies, jwt_required, JWTManager, set_access_cookies, get_jwt
 import requests
 import os
 from dotenv import load_dotenv
