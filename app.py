@@ -108,14 +108,10 @@ def authenticate():
 
 @app.route('/', methods=['GET'])
 def index():
-    try:
-        username = get_jwt_identity()['username']
-        authenticated = get_jwt_identity()['authenticated']
-        if authenticated:
-            response = redirect(url_for("profile"))
-            return response
-    except Exception:
-        return render_template('index.html')
+    username = get_jwt_identity()['username']
+    authenticated = get_jwt_identity()['authenticated']
+
+    return render_template('index.html')
 
 @app.route('/profile', methods=['GET'])
 @jwt_required()
