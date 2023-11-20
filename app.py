@@ -116,7 +116,7 @@ def index():
     return render_template('index.html')
 
 @app.route('/profile', methods=['GET'])
-@verify_jwt_in_request()
+@jwt_required()
 def profile():
     username = get_jwt_identity()['username']
     authenticated = get_jwt_identity()['authenticated']
