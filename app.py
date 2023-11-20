@@ -9,6 +9,7 @@ from flask_jwt_extended import unset_access_cookies
 from flask_jwt_extended import jwt_required
 from flask_jwt_extended import JWTManager
 from flask_jwt_extended import set_access_cookies
+from flask_jwt_extended import verify_jwt_in_request
 
 app = Flask(__name__)
 load_dotenv()
@@ -114,7 +115,7 @@ def index():
     return render_template('index.html')
 
 @app.route('/profile', methods=['GET'])
-@jwt_required()
+@verify_jwt_in_request()
 def profile():
     username = get_jwt_identity()['username']
     authenticated = get_jwt_identity()['authenticated']
