@@ -63,11 +63,16 @@ def authenticate_totp():
     otp = request.form.get("otp")
     print(f"OTP: {otp}")
     print(type(otp))
-    if otp is None or len(otp) == 0:
+    try:
+        otp = int(otp)
+    except Exception:
+        otp = None
+    
+    if not otp:
         flash("Please enter a pin.", category="danger")
         response = redirect(url_for("authenticate"))
     else:
-        resp = requests.post('http://192.168.157.10/validate/check', data={'user': username, 'pass':int(otp), 'realm':'defrealm'})
+        resp = requests.post('http://192.168.157.10/validate/check', data={'user': username, 'pass':otp, 'realm':'defrealm'})
         resp = resp.json()
         if resp['result']['authentication'] == "ACCEPT":
             print("worked!")
