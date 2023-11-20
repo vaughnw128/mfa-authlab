@@ -70,12 +70,12 @@ def reset():
                     resp = requests.put('http://192.168.157.10/user', data={'user':username, 'password':password, 'realm':'defrealm', 'resolver':'defsqlresolver'}, headers={"Authorization": authorization})
                     flash("Password successfully reset", category="success")
                     return redirect(url_for("index"))
+            else:
+                flash("Invalid TOTP", category="danger")
+                response = redirect(url_for("reset_password"))
+                return response
         except Exception:
             flash("Invalid TOTP or User", category="danger")
-            response = redirect(url_for("reset_password"))
-            return response
-        else:
-            flash("Invalid TOTP", category="danger")
             response = redirect(url_for("reset_password"))
             return response
     else:
