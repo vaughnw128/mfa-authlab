@@ -62,6 +62,7 @@ def authenticate_totp():
     else:
         resp = requests.post('http://192.168.157.10/validate/check', data={'user': username, 'pass':otp, 'realm':'defrealm'})
         resp = resp.json()
+        print(resp)
         if resp['result']['authentication'] == "ACCEPT":
             print("worked!")
             response = redirect(url_for("profile"))
