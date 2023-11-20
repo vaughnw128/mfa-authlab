@@ -31,7 +31,7 @@
     <link href="/static/css/signin.css" rel="stylesheet">
   </head>
 
-<div class="text-center">
+<body class="text-center">
   <main class="form-signin">
     <form action="/login" method="POST">
       <h1 class="h3 mb-3 fw-normal">Please log in</h1>
@@ -51,6 +51,6 @@
     </form>
     <a href="{{ url_for('reset_password') }}" class="mt-5 mb-3 text-muted"> Reset Password </a>
   </main>
-</div>
+</body>
 
 {% endblock %}
