@@ -21,6 +21,7 @@ jwt = JWTManager(app)
 # Using an `after_request` callback, we refresh any token that is within 30
 # minutes of expiring. Change the timedeltas to match the needs of your application.
 @app.after_request
+@verify_jwt_in_request
 def refresh_expiring_jwts(response):
     print("hello")
     t = get_jwt()
