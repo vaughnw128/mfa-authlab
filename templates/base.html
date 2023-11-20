@@ -8,11 +8,24 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <title>{% block title %}{% endblock %}</title>
+
+    <style>
+      .box {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .box div {
+        width: 100px;
+        height: 100px;
+      }
+    </style>
+
 </head>
 
 <body>
-
-    {% block content %}
+    <div class="box">
     {% with messages = get_flashed_messages(with_categories=true) %}
         <!-- Categories: success (green), info (blue), warning (yellow), danger (red) -->
         {% if messages %}
@@ -24,6 +37,9 @@
           {% endfor %}
         {% endif %}
     {% endwith %}
+    </div>
+
+    {% block content %}
     {% endblock %}
 
 </body>
