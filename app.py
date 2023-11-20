@@ -30,7 +30,7 @@ def refresh_expiring_jwts(response):
         exp_timestamp = datetime.fromtimestamp(exp_timestamp)
         print(now)
         print(exp_timestamp)
-        if int(now) > exp_timestamp:
+        if now > exp_timestamp:
             unset_access_cookies(response)
         return response
     except (RuntimeError, KeyError):
