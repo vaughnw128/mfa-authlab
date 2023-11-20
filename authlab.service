@@ -1,0 +1,12 @@
+[Unit]
+Description=Authentication Lab: MFA
+After=network.target
+
+[Service]
+User=root
+WorkingDirectory=/var/www/mfa-authlab
+ExecStart=gunicorn -b 0.0.0.0:8080 -w 4 app:app
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

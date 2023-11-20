@@ -80,12 +80,13 @@ On the next page, it privacyIDEA will show you the QR code. Scanning the QR code
 
 ## Website
 
-Set your environment variables:
+Set your environment variables by creating a .env file with these details:
 
 ```bash
-export JWT_SECRET_KEY=VALUE
-export AUTH_ADMIN=VALUE
-export AUTH_PASSWORD=VALUE
+JWT_SECRET_KEY=VALUE
+AUTH_ADMIN=VALUE
+AUTH_PASSWORD=VALUE
+APP_SECRET_KEY=VALUE
 ```
 
 Install the requirements:
@@ -98,3 +99,5 @@ Now run it!
 ```bash
 python3 app.py
 ```
+
+This can also be configured with systemd to run as a service.
