@@ -53,7 +53,7 @@ def login():
             set_access_cookies(response, access_token)
             return response
         else:
-            flash("Invalid credentials.")
+            flash("Invalid credentials.", category="danger")
             return redirect(url_for('index'))
 
 @app.route('/authenticate_totp', methods=['POST'])
