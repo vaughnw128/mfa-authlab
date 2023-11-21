@@ -24,6 +24,7 @@ jwt = JWTManager(app)
 @app.after_request
 @jwt_required(optional=True)
 def refresh_expiring_jwts(response):
+    print("asdasd")
     try:
         now = datetime.now(timezone.utc)
         now = int(round(now.timestamp()))
