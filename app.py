@@ -24,6 +24,7 @@ jwt = JWTManager(app)
 def expired_token_callback(callback, expired_token):
     response = redirect(url_for("index"))
     unset_access_cookies(response)
+    flash("Your session has expired. Please re-authenticate", category="info")
     return response
 
 @app.route('/logout', methods=['GET'])
