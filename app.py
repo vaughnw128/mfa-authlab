@@ -20,7 +20,7 @@ app.secret_key = os.getenv("APP_SECRET_KEY")
 jwt = JWTManager(app)
 
 @jwt.expired_token_loader
-def expired_token_callback(expired_token):
+def expired_token_callback():
     response = redirect(url_for("index"))
     unset_access_cookies(response)
     return
