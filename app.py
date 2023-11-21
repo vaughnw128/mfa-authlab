@@ -19,27 +19,33 @@ app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(hours=1)
 app.secret_key = os.getenv("APP_SECRET_KEY")
 jwt = JWTManager(app)
 
-# Using an `after_request` callback, we refresh any token that is within 30
-# minutes of expiring. Change the timedeltas to match the needs of your application.
-@app.after_request
-@jwt_required(optional=True)
-def refresh_expiring_jwts(response):
-    print("asdasd")
-    try:
-        now = datetime.now(timezone.utc)
-        now = int(round(now.timestamp()))
-        exp_timestamp = get_jwt()["exp"]
-        if now > exp_timestamp:
-            unset_access_cookies(response)
-        return response
-    except (RuntimeError, KeyError):
-        return response
-    except Exception:
-        try:
-            unset_access_cookies(response)
-            return response
-        except Exception:
-            return response
+@jwt.expired_token_loader
+def expired_token_callback(expired_token):
+    response = redirect(url_for("index"))
+    unset_access_cookies(response)
+    return
+
+# # Using an `after_request` callback, we refresh any token that is within 30
+# # minutes of expiring. Change the timedeltas to match the needs of your application.
+# @app.after_request
+# @jwt_required(optional=True)
+# def refresh_expiring_jwts(response):
+#     print("asdasd")
+#     try:
+#         now = datetime.now(timezone.utc)
+#         now = int(round(now.timestamp()))
+#         exp_timestamp = get_jwt()["exp"]
+#         if now > exp_timestamp:
+#             unset_access_cookies(response)
+#         return response
+#     except (RuntimeError, KeyError):
+#         return response
+#     except Exception:
+#         try:
+#             unset_access_cookies(response)
+#             return response
+#         except Exception:
+#             return response
 
 @app.route('/logout', methods=['GET'])
 @jwt_required(optional=True)
