@@ -1,11 +1,12 @@
 from flask import Flask, render_template, redirect, url_for, request, flash, session, jsonify, request
-from flask_jwt_extended import create_access_token, get_jwt_identity, verify_jwt_in_request, unset_access_cookies, jwt_required, JWTManager, set_access_cookies, get_jwt
+from flask_jwt_extended import create_access_token, get_jwt_identity, decode_jwt_from_request, verify_jwt_in_request, unset_access_cookies, jwt_required, JWTManager, set_access_cookies, get_jwt
 import requests
 import os
 from dotenv import load_dotenv
 from datetime import datetime
 from datetime import timedelta
 from datetime import timezone
+from functools import wraps
 
 app = Flask(__name__)
 load_dotenv()
@@ -19,12 +20,34 @@ app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(hours=1)
 app.secret_key = os.getenv("APP_SECRET_KEY")
 jwt = JWTManager(app)
 
+def redirect_if_jwt_invalid(view_function):
+    @wraps(view_function)
+    def wrapper(*args, **kwargs):
+        # attempt to grab the jwt from request
+        try:
+            jwt_data = decode_jwt_from_request(request_type='access')
+        except:
+            jwt_data = None
+        # if the grab worked and the identity key is in the dict then proceed
+        if jwt_data and 'identity' in jwt_data:
+            return view_function(*args, **kwargs)
+        else:
+            return redirect('index', code=302)
+
+    return wrapper 
+
 # Tokens expire after one hour, and are then unset after that interval requiring a relogin
 @jwt.expired_token_loader
 def expired_token_callback(callback, expired_token):
     response = redirect(url_for("index"))
     unset_access_cookies(response)
     flash("Your session has expired. Please re-authenticate", category="info")
+    return response
+
+@jwt.unauthorized_loader
+def unauthorized_callback(callback):
+    response = redirect(url_for("index"))
+    flash("The JWT is inavlid. Please re-authenticate", category="warning")
     return response
 
 @app.route('/logout', methods=['GET'])
@@ -142,7 +165,7 @@ def index():
     return render_template('index.html')
 
 @app.route('/profile', methods=['GET'])
-@jwt_required()
+@redirect_if_jwt_invalid()
 def profile():
     identity = get_jwt_identity()
     if identity is not None:
